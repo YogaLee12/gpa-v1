@@ -1,5 +1,20 @@
-## Next.js App Router Course - Starter
+## Next.js GPA calculator
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+# system requirements
+    Node.js 18.17.0 or later
+    Operating system: macOS, windows or linux
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
+# To run locally
+    This project use pnpm as package manager
+        pnpm run dev (or : npm run dev)
+        default port 3000
+
+# Database
+    PostgreSQL (on vercel)
+
+### Database table
+    user:
+        id: unique identifier (PK)
+        userName: user name
+        email: user for sign in 
+        password: for sign in
