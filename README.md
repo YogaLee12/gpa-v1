@@ -20,11 +20,11 @@
         email: user for sign in 
         password: for sign in
         propic: profile picture url(nullable) [may be not using any profile pictrue]
-    
+
     courses:
         id: unique identifier (PK)
-        course_code:course code (eg: CSSE1001)
-        course_name course name
+        course_code: course code (eg: CSSE1001)
+        course_name: course name
 
     enrollments:
         id: unique identifier of enrollment record(PK)
@@ -33,7 +33,6 @@
         year: the year the course been enrolled(2023)
         semester: the semseter the course been enrolled (1,2,summer)
         gpa_point: the gpa of this course(nullable)
-        state: to show is this course is completed
 
     assignments:
         id: unique identifier(PK)
