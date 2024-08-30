@@ -1,5 +1,6 @@
 # Next.js GPA calculator
-
+    This is a GPA calculator developed based on Next.js, which allows users to enter course information and calculate their own gpa. It also allows users to predict their scores in advance.
+    
 ## system requirements
     Node.js 18.17.0 or later
     Operating system: macOS, windows or linux
