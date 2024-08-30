@@ -1,15 +1,15 @@
-## Next.js GPA calculator
+# Next.js GPA calculator
 
-# system requirements
+## system requirements
     Node.js 18.17.0 or later
     Operating system: macOS, windows or linux
 
-# To run locally
+## To run locally
     This project use pnpm as package manager
         pnpm run dev (or : npm run dev)
         default port 3000
 
-# Database
+## Database
     PostgreSQL (on vercel)
 
 ### Database table
