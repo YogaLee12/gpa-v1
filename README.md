@@ -1,5 +1,6 @@
 # Next.js GPA calculator
-    This is a GPA calculator developed based on Next.js, which allows users to enter course information and calculate their own gpa. It also allows users to predict their scores in advance.
+
+This is a GPA calculator developed based on Next.js, which allows users to enter course information and calculate their own gpa. It also allows users to predict their scores in advance.
     
 ## system requirements
     Node.js 18.17.0 or later
@@ -19,11 +20,11 @@
         user_name: user name
         email: user for sign in 
         password: for sign in
-        propic: profile picture url(nullable) [may be not using any profile pictrue]
+        avatar_url: profile picture url(nullable) [may be not using any profile pictrue]
 
     courses:
         id: unique identifier (PK)
-        course_code: course code (eg: CSSE1001)
+        course_code: course code (eg: CSSE1001A)
         course_name: course name
 
     enrollments:
