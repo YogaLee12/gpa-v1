@@ -13,7 +13,7 @@ const courses = [
         id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
         course_code: 'CSSE1001',
         course_name:'Introduction to Software Engineering'
-    }
+    },
 ];
 
 const enrollments = [
