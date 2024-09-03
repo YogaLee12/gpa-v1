@@ -3,16 +3,16 @@ import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
 import { sql } from '@vercel/postgres';
-import type { User } from '@/app/lib/definitions';
+import type { Students } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 
-async function getUser(email: string): Promise<User | undefined> {
+async function getStudent(email: string): Promise<Students | undefined> {
     try {
-        const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
-        return user.rows[0];
+        const student = await sql<Students>`SELECT * FROM students WHERE email=${email}`;
+        return student.rows[0];
     } catch (error) {
-        console.error('Failed to fetch user:', error);
-        throw new Error('Failed to fetch user.');
+        console.error('Failed to fetch student:', error);
+        throw new Error('Failed to fetch student.');
     }
 }
     
@@ -27,12 +27,12 @@ export const { auth, signIn, signOut } = NextAuth({
     
             if (parsedCredentials.success) {
             const { email, password } = parsedCredentials.data;
-            const user = await getUser(email);
-            if (!user) return null;
-            const passwordMatch = await bcrypt.compare(password, user.password);
+            const student = await getStudent(email);
+            if (!student) return null;
+            const passwordMatch = await bcrypt.compare(password, student.password);
 
             if (passwordMatch) 
-                return user;
+                return student;
             }
             
             console.log('Invalid credentials')
@@ -40,4 +40,5 @@ export const { auth, signIn, signOut } = NextAuth({
         },
         }),
     ],
+    
 });

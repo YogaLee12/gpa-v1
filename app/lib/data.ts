@@ -7,6 +7,7 @@ import {
     EnrolledCoursesTable
 } from './definitions';
 
+
 // dashboard page fetch the enrollment data
 export async function fetchLatestEnrollments() {
     try {

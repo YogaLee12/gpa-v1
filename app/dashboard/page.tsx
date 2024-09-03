@@ -3,14 +3,15 @@ import RevenueChart from '@/app/ui/dashboard/revenue-chart';
 import LatestEnrollment from '@/app/ui/dashboard/latest-enrollments';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchLatestEnrollments } from '@/app/lib/data';
+import { auth } from '@/auth';
 
 export default async function Page(){
     const LatestEnrollments = await fetchLatestEnrollments();
-
+    const sth = await auth();
     return (
         <main>
             <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-            Dashboard
+            Welcom  {sth?.user?.name} !
             </h1>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* <Card title="Collected" value={totalPaidInvoices} type="collected" /> */}

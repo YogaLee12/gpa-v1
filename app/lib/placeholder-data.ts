@@ -3,7 +3,7 @@ const students = [
         id: '410544b2-4001-4271-9855-fec4b6a6442a',
         name: 'student1',
         email: 'stu@stu.com',
-        password: '123',
+        password: '123456',
         avatar_url:'',
     },
 ];
