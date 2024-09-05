@@ -28,6 +28,9 @@ export async function fetchRevenue() {
     throw new Error('Failed to fetch revenue data.');
   }
 }
+
+
+
 export async function fetchLatestEnrollments() {
   try {
       const data = await sql<LatestEnrollments>`
