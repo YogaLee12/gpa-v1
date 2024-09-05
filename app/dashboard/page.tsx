@@ -6,7 +6,7 @@ import { auth } from '@/auth';
 
 export default async function Page(){
     const LatestEnrollments = await fetchLatestEnrollments();
-    const student = await auth() ;
+    const student = await auth() || null;
     return (
         <main>
             <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
