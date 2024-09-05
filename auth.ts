@@ -6,7 +6,7 @@ import { sql } from '@vercel/postgres';
 import type { Students } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 
-async function getStudent(email: string): Promise<Students | undefined> {
+export async function getStudent(email: string): Promise<Students | undefined> {
     try {
         const student = await sql<Students>`SELECT * FROM students WHERE email=${email}`;
         return student.rows[0];
