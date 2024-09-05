@@ -9,12 +9,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 
-const FormStu = z.object({
-    id:z.string(),
-    name:z.string(),
-    email:z.string(),
-    password: z.string().min(6),
-});
 
 
 export async function authenticate(
@@ -36,12 +30,21 @@ export async function authenticate(
     }
 }
 
+export const FormStu = z.object({
+            id:z.string(),
+            name:z.string(),
+            email:z.string(),
+            password: z.string().min(6),
+        });
 
-const RegisterStu = FormStu.omit({id:true});
+export const RegisterStu = FormStu.omit({id:true});
+
 export async function register(
     // prevSate:string | undefined,
     formData: FormData,
 ) {
+
+        
         // get form data
         const validatedStu = RegisterStu.safeParse( {
             name: formData.get('name'),
