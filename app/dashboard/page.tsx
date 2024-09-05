@@ -3,7 +3,7 @@ import RevenueChart from '@/app/ui/dashboard/revenue-chart';
 import LatestEnrollment from '@/app/ui/dashboard/latest-enrollments';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchLatestEnrollments } from '@/app/lib/data';
-import { sth } from '@/app/lib/fetchUserName';
+import { sth } from '@/app/lib/fetch-stu';
 
 export default async function Page(){
     const LatestEnrollments = await fetchLatestEnrollments();
