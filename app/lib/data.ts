@@ -6,6 +6,7 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
+  LatestEnrollments,
 } from './definitions';
 import { formatCurrency } from './utils';
 
@@ -27,7 +28,21 @@ export async function fetchRevenue() {
     throw new Error('Failed to fetch revenue data.');
   }
 }
+export async function fetchLatestEnrollments() {
+  try {
+      const data = await sql<LatestEnrollments>`
+      SELECT c.course_name, c.course_code 
+      FROM enrollments e
+      JOIN courses c ON e.course_id = c.id
+      ORDER BY e.year DESC
+      LIMIT 4`;
 
+      return data.rows;
+  } catch (error) {
+      console.error('Database Error:', error);
+      throw new Error('Failed to fetch the latest enrollments.');
+  }
+}
 export async function fetchLatestInvoices() {
   try {
     const data = await sql<LatestInvoiceRaw>`
