@@ -10,7 +10,6 @@ export type Students = {
     name: string;
     email: string;
     password: string;
-    avatar_url: string;
 };
 
 export type Courses = {

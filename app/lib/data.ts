@@ -4,7 +4,7 @@ import {
     CustomersTableType,
     InvoiceForm,
     LatestEnrollments,
-    EnrolledCoursesTable
+    EnrolledCoursesTable,
 } from './definitions';
 
 

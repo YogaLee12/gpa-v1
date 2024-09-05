@@ -1,8 +1,8 @@
 import type { NextAuthConfig } from 'next-auth';
-
-export const authConfig = {
+    
+    export const authConfig = {
     pages: {
-    signIn: '/login',
+        signIn: '/login',
     },
     callbacks: {
         authorized({ auth, request: { nextUrl } }) {
@@ -17,5 +17,5 @@ export const authConfig = {
         return true;
         },
     },
-  providers: [], // Add providers with an empty array for now
+    providers: [], // Add providers with an empty array for now
 } satisfies NextAuthConfig;
