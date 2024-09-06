@@ -11,6 +11,7 @@ import {
 import { auth } from '@/auth';
 import { formatCurrency } from './utils';
 import type { Students } from '@/app/lib/definitions';
+import { unstable_noStore as noStore } from 'next/cache';
 
 async function fetchStudentId() {
     const stu = await auth();
@@ -19,7 +20,7 @@ async function fetchStudentId() {
 }
 
 export async function fetchLatestEnrollments() {
-    
+    noStore();
     try {
         const stuId = await fetchStudentId();
         const data = await sql<LatestEnrollments>`
