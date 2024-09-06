@@ -5,21 +5,23 @@ import {
     UserIcon,
     AtSymbolIcon,
     KeyIcon,
+    ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@/app/ui/button';
 import { register } from '@/app/lib/actions'; // 假设你有一个 register 函数
 import Link from 'next/link';
+import { useActionState } from 'react';
 
 export default function RegisterForm() {
-    // const [errorMessage, formAction, isPending] = useActionState(
-    //     register,
-    //     undefined,
-    // );
+    const [errorMessage, formAction, isPending] = useActionState(
+        register,
+        undefined,
+    );
     
     
     return (
-        <form action={register} className="space-y-3">
+        <form action={formAction} className="space-y-3">
             <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
                 <h1 className={`${lusitana.className} mb-3 text-2xl`}>
                     Register a new account
@@ -98,7 +100,7 @@ export default function RegisterForm() {
                     <span className="mx-4 text-gray-500">or</span>
                     <hr className="flex-1 border-t border-gray-300" />
                 </div>
-                {/* <div
+                <div
                     className="flex h-8 items-end space-x-1"
                     aria-live="polite"
                     aria-atomic="true"
@@ -109,7 +111,7 @@ export default function RegisterForm() {
                             <p className="text-sm text-red-500">{errorMessage}</p>
                         </>
                     )}
-                </div> */}
+                </div>
             </div>
         </form>
     );
