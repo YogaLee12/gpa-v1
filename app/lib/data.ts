@@ -9,7 +9,6 @@ import {
     LatestEnrollments,
 } from './definitions';
 import { auth } from '@/auth';
-import { formatCurrency } from './utils';
 import type { Students } from '@/app/lib/definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
