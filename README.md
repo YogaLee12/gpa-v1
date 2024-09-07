@@ -15,7 +15,7 @@ This is a GPA calculator developed based on Next.js, which allows users to enter
     PostgreSQL (on vercel)
 
 ### Database table
-    users:
+    students:
         id: unique identifier (PK)
         user_name: user name
         email: user for sign in 
