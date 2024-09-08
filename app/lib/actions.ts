@@ -2,13 +2,11 @@
 
 import { signIn } from "@/auth";
 import { sql } from "@vercel/postgres";
+import { error } from "console";
 import { AuthError } from "next-auth";
-import { z } from "zod";
-import bcrypt from 'bcrypt';
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import exp from "constants";
-
+import { formatDynamicAPIAccesses } from "next/dist/server/app-render/dynamic-rendering";
+import { z } from "zod";
 
 
 
@@ -32,69 +30,6 @@ export async function authenticate(
 }
 
 
-// export async function register(
-// // prevSate:string | undefined,
-//     formData: FormData,
-//     ) {
-//     const FormStu = z.object({
-//         id:z.string(),
-//         name:z.string(),
-//         email:z.string(),
-//         password: z.string().min(6),
-//     });
-
-//     const RegisterStu = FormStu.omit({id:true});
-
-//         // get form data
-//         const validatedStu = RegisterStu.safeParse( {
-//             name: formData.get('name'),
-//             email: formData.get('email'),
-//             password: formData.get('password'),
-//             });
-
-//         // valid form fields
-//         if (!validatedStu.success){
-//             return {
-//                 errors: validatedStu.error.flatten().fieldErrors,
-//                 message: 'All fields are required.',
-//             };
-//         }
-
-//         const {name, email,password} = validatedStu.data;
-
-//         try {
-//             const exsitingStu = await sql`
-//                 SELECT * FROM students WHERE email = ${email};
-//             `
-            
-//             if (exsitingStu.rows.length>0){
-//                 return {message:'Email already registered.'};
-                
-//             }else{
-//                 const hashedPassword = await bcrypt.hash(password, 10);
-//                 try {
-//                     await sql`
-//                     INSERT INTO students (name , email, password)
-//                     VALUES (${name}, ${email}, ${hashedPassword})
-//                     `;
-//                 } catch (error) {
-//                     // If a database error occurs, return a more specific error.
-//                     return {
-//                     message: 'Database Error: Failed to Create Invoice.',
-//                     };
-//                 }
-
-//         }
-            
-
-//         } catch (error) {
-//             console.error('Database Error',error);
-//             return{message:'Internal server error'};
-//         }
-//         revalidatePath('/login');
-//         redirect('/login');
-
-// }
 export async function register(
     prevState: string | undefined,
     formData: FormData,
@@ -112,4 +47,52 @@ export async function register(
         }
         throw error;
     }
+}
+
+export async function deleteCourse(id:string) {
+    await sql `DELETE FROM enrollments WHERE id = ${id}`;
+    revalidatePath('dashborad/calculator');
+    
+}
+
+const FormSchema = z.object({
+    id: z.string(),
+    course_code: z.string({
+        invalid_type_error:'Please select/enter a course code'
+    }),
+    course_name: z.string({
+        invalid_type_error:'Please select/enter a course name'
+    }),
+
+})
+
+export type State = {
+    errors?: {
+        course_code?: string[];
+        course_name?: string[];
+    };
+    message?: string | null;
+} ;
+
+const AddCourse = FormSchema.omit({id:true});
+export async function addCourse(
+    
+    formData: FormData
+    ) {
+    const validatedFields = AddCourse.safeParse({
+        course_code: formData.get('course_code'),
+        course_name: formData.get('course_name')
+    });
+
+    if (!validatedFields.success){
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message:'Missing fields. failed to add course'
+        };
+    }
+
+    const {course_code,course_name} = validatedFields.data;
+    console.log('course code:',{course_code},', course name:',{course_name})
+    await sql`INSERT INTO courses (course_code, course_name)
+    VALUES (${course_code}, ${course_name})`
 }

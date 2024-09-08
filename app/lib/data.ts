@@ -1,12 +1,9 @@
 import { sql } from '@vercel/postgres';
 import {
-    CustomerField,
-    CustomersTableType,
-    InvoiceForm,
-    InvoicesTable,
-    LatestInvoiceRaw,
-    Revenue,
     LatestEnrollments,
+    EnrolledCoursesTable,
+    Courses,
+    AddCourse
 } from './definitions';
 import { auth } from '@/auth';
 import type { Students } from '@/app/lib/definitions';
@@ -41,3 +38,49 @@ export async function fetchLatestEnrollments() {
 }
 
 
+
+export async function fetchEnrolledCourse(
+    query: string,
+) {
+    noStore();
+    const stuId = await fetchStudentId();
+    try {
+    const enrollCourse = await sql<EnrolledCoursesTable>`
+        SELECT
+            c.course_code,
+            c.course_name,
+            e.year,
+            e.semester,
+            e.gpa_point,
+            e.status,
+            e.id
+        FROM enrollments e
+        JOIN courses c ON e.course_id = c.id
+        WHERE
+            e.user_id = ${stuId.rows[0].id} AND (
+            c.course_name ILIKE ${`%${query}%`} OR
+            c.course_code ILIKE ${`%${query}%`} OR
+            e.year::text ILIKE ${`%${query}%`} )
+            
+        ORDER BY e.year DESC
+    `;
+
+    return enrollCourse.rows;
+    } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch course.');
+    }
+}
+
+export async function fetchCourse() {
+    try{
+        const data = await sql<AddCourse>`
+        SELECT * FROM courses
+        `;
+        const courses = data.rows;
+        return courses;
+    }catch(err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch all course.');
+    }
+}
