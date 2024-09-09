@@ -5,8 +5,14 @@ import { sql } from "@vercel/postgres";
 import { error } from "console";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
-import { formatDynamicAPIAccesses } from "next/dist/server/app-render/dynamic-rendering";
+import { redirect } from "next/navigation";
 import { z } from "zod";
+import { courseExists, 
+    fetchCourseId, 
+    insertCourse,
+    insertEnrollment,
+    } from "@/app/lib/db/queries";
+import { fetchStudentId } from "@/app/lib/data";
 
 
 
@@ -63,6 +69,9 @@ const FormSchema = z.object({
     course_name: z.string({
         invalid_type_error:'Please select/enter a course name'
     }),
+    year: z.string(),
+    semester:z.string(),
+    status:z.enum(['upcoming','completed']),
 
 })
 
@@ -70,29 +79,56 @@ export type State = {
     errors?: {
         course_code?: string[];
         course_name?: string[];
+        year?: string[];
+        semester?: string[];
+        status?:string[];
     };
     message?: string | null;
 } ;
 
 const AddCourse = FormSchema.omit({id:true});
 export async function addCourse(
-    
+    // prevState:State,
     formData: FormData
     ) {
+    
+    const stuId = (await fetchStudentId()).rows[0].id;
+    // console.log(stuId);
     const validatedFields = AddCourse.safeParse({
         course_code: formData.get('course_code'),
-        course_name: formData.get('course_name')
+        course_name: formData.get('course_name'),
+        year: formData.get('year'),
+        semester: formData.get('semester'),
+        status: formData.get('status'),
     });
-
     if (!validatedFields.success){
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message:'Missing fields. failed to add course'
         };
     }
+    const {
+        course_code,
+        course_name,
+        year,
+        semester,
+        status,
+    } = validatedFields.data;
 
-    const {course_code,course_name} = validatedFields.data;
-    console.log('course code:',{course_code},', course name:',{course_name})
-    await sql`INSERT INTO courses (course_code, course_name)
-    VALUES (${course_code}, ${course_name})`
+    course_code.toLocaleUpperCase;
+    
+
+    const iscourseExists = await courseExists(course_code);
+    if (iscourseExists){
+        // console.log(course_code,'is in course table')
+        const courseId = await fetchCourseId(course_code);
+        insertEnrollment(stuId,courseId,Number.parseInt(year),semester,status);
+    }else{
+        insertCourse(course_code,course_name);
+        const courseId = await fetchCourseId(course_code);
+        insertEnrollment(stuId,courseId,Number.parseInt(year),semester,status);
+    }
+    
+    revalidatePath('/dashboard/calculator')
+    redirect('/dashboard/calculator')
 }

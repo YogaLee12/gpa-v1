@@ -67,8 +67,8 @@ export async function fetchEnrolledCourse(
 
     return enrollCourse.rows;
     } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch course.');
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch course.');
     }
 }
 
@@ -84,3 +84,5 @@ export async function fetchCourse() {
         throw new Error('Failed to fetch all course.');
     }
 }
+
+
