@@ -66,11 +66,12 @@ const FormSchema = z.object({
     course_code: z.string({
         invalid_type_error:'Please select/enter a course code'
     }),
-    course_name: z.string({
+    course_name: z.coerce.string({
         invalid_type_error:'Please select/enter a course name'
     }),
     year: z.string(),
     semester:z.string(),
+    gpa: z.coerce.number(),
     status:z.enum(['upcoming','completed']),
 
 })
@@ -81,6 +82,7 @@ export type State = {
         course_name?: string[];
         year?: string[];
         semester?: string[];
+        gpa?: string[]
         status?:string[];
     };
     message?: string | null;
@@ -99,6 +101,7 @@ export async function addCourse(
         course_name: formData.get('course_name'),
         year: formData.get('year'),
         semester: formData.get('semester'),
+        gpa:formData.get('gpa'),
         status: formData.get('status'),
     });
     if (!validatedFields.success){
@@ -112,21 +115,21 @@ export async function addCourse(
         course_name,
         year,
         semester,
+        gpa,
         status,
     } = validatedFields.data;
 
     course_code.toLocaleUpperCase;
-    
 
     const iscourseExists = await courseExists(course_code);
     if (iscourseExists){
         // console.log(course_code,'is in course table')
         const courseId = await fetchCourseId(course_code);
-        insertEnrollment(stuId,courseId,Number.parseInt(year),semester,status);
+        insertEnrollment(stuId,courseId,Number.parseInt(year),semester,gpa,status,);
     }else{
         insertCourse(course_code,course_name);
         const courseId = await fetchCourseId(course_code);
-        insertEnrollment(stuId,courseId,Number.parseInt(year),semester,status);
+        insertEnrollment(stuId,courseId,Number.parseInt(year),semester,gpa,status);
     }
     
     revalidatePath('/dashboard/calculator')

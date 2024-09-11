@@ -1,5 +1,4 @@
 import { sql } from "@vercel/postgres";
-import exp from "constants";
 
 export async function courseExists(course_code:string) {
     const result = await sql`
@@ -32,10 +31,12 @@ export async function insertEnrollment(
     course_id:string,
     year:number,
     semester:string,
-    status:'upcoming' | 'completed'
+    gpa: number | null,
+    status:'upcoming' | 'completed',
+    
     ) {
     await sql`
-    INSERT INTO enrollments (user_id,course_id,year,semester,status)
-    VALUES(${user_id},${course_id},${year},${semester},${status})
+    INSERT INTO enrollments (user_id,course_id,year,semester,gpa_point,status)
+    VALUES(${user_id},${course_id},${year},${semester},${gpa},${status})
     `
 }

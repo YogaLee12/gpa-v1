@@ -1,6 +1,7 @@
 import { UpdateInvoice, DeleteCourse } from '@/app/ui/calculator/button';
 import CourseStatus from '@/app/ui/calculator/status';
 import { fetchEnrolledCourse } from '@/app/lib/data';
+import Link from 'next/link';
 
 export default async function InvoicesTable({
     query,
@@ -10,7 +11,8 @@ export default async function InvoicesTable({
     // currentPage: number;
     }) {
     const enrollCourses = await fetchEnrolledCourse(query);
-    console.log(enrollCourses);
+    
+
 
     return (
         <div className="mt-6 flow-root">
@@ -27,7 +29,7 @@ export default async function InvoicesTable({
                         <div className="mb-2 flex items-center">
                         <p>{enrollCourse.course_code}</p>
                         </div>
-                        <p className="text-sm text-gray-500">{enrollCourse.course_name}</p>
+                        <p className="text-md text-black">{enrollCourse.course_name}</p>
                     </div>
                     <CourseStatus status={enrollCourse.status === 'upcoming'? ('upcoming'):(
                         enrollCourse.gpa_point.toString()
@@ -35,7 +37,7 @@ export default async function InvoicesTable({
                     </div>
                     <div className="flex w-full items-center justify-between pt-4">
                     <div>
-                        <p className="text-xl font-medium">
+                        <p className="text-sm font-sm">
                         {enrollCourse.year} semester:{enrollCourse.semester}
                         </p>
                     </div>
@@ -68,25 +70,35 @@ export default async function InvoicesTable({
                 </tr>
                 </thead>
                 <tbody className="bg-white">
+                    
                 {enrollCourses?.map((enrollCourse) => (
+                
                     <tr
+                    
                     key={enrollCourse.id}
                     className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                     >
-                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex items-center gap-3">
-                        <p>{enrollCourse.course_code}</p>
-                        </div>
+                    
+                    <td className="whitespace-nowrap ">
+                        <Link className="flex items-center gap-3 py-3 pl-6 pr-3" href={`/dashboard/calculator/${enrollCourse.id}/detail`}>
+                        {enrollCourse.course_code}
+                        </Link>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3">
-                        {enrollCourse.course_name}
+                    
+                    <td className="whitespace-nowrap ">
+                        <Link className='px-3 py-3' href={`/dashboard/calculator/${enrollCourse.id}/detail`}>{enrollCourse.course_name}</Link>
                     </td>
+
                     <td className="whitespace-nowrap px-3 py-3">
+                        <Link className='px-3 py-3' href={`/dashboard/calculator/${enrollCourse.id}/detail`}>
                         {enrollCourse.year} semester:{enrollCourse.semester}
+                        </Link>
                     </td>
                     
                     <td className="whitespace-nowrap px-3 py-3">
-                        <CourseStatus status={enrollCourse.status} />
+                        <CourseStatus status={enrollCourse.status === 'upcoming'? ('upcoming'):(
+                        enrollCourse.gpa_point.toString()
+                    )}  />
                     </td>
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
@@ -95,7 +107,9 @@ export default async function InvoicesTable({
                         </div>
                     </td>
                     </tr>
+                    
                 ))}
+                
                 </tbody>
             </table>
             </div>

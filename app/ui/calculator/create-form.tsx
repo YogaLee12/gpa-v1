@@ -7,7 +7,7 @@ import { Button } from '@/app/ui/button';
 import { useCourseSelect } from '@/app/lib/selectCourse'; // 引入外部钩子
 import { addCourse } from '@/app/lib/actions';
 import { useState } from 'react';
-import { SEMESTERS,YEARS } from '@/app/lib/getyear';
+import { SEMESTERS,YEARS,useCourseStatus, STATUS_COMPLETED, STATUS_UPCOMING } from '@/app/lib/createPageConstants';
 
 export default function Form({ courses }: { courses: AddCourse[] }) {
     const {
@@ -27,6 +27,7 @@ export default function Form({ courses }: { courses: AddCourse[] }) {
 
     const [selectedYear, setSelectedYear] = useState<number | null>(null);
     const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
+    const { selectedStatus, gpa, handleStatusChange, handleGpaChange } = useCourseStatus();
 
 
     return (
@@ -147,7 +148,7 @@ export default function Form({ courses }: { courses: AddCourse[] }) {
                     ))}
                 </select>
             </div>
-        </div>
+                </div>
                 {/* status */}
                 <fieldset>
             <legend className="mb-2 block text-sm font-medium">
@@ -155,12 +156,15 @@ export default function Form({ courses }: { courses: AddCourse[] }) {
             </legend>
             <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
                 <div className="flex gap-4">
+            {/* upcoming Status */}
                 <div className="flex items-center">
                     <input
                     id="upcoming"
                     name="status"
                     type="radio"
                     value="upcoming"
+                    checked={selectedStatus === STATUS_UPCOMING}
+                    onChange={handleStatusChange}
                     className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                     
                     />
@@ -171,25 +175,45 @@ export default function Form({ courses }: { courses: AddCourse[] }) {
                     upcoming <ClockIcon className="h-4 w-4" />
                     </label>
                 </div>
-                <div className="flex items-center">
+            {/* completed Status */}
+                    <div className="flex items-center">
                     <input
                     id="completed"
                     name="status"
                     type="radio"
                     value="completed"
+                    checked={selectedStatus === STATUS_COMPLETED}
+                    onChange={handleStatusChange}
                     className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                     />
                     <label
                     htmlFor="completed"
                     className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                     >
-                    completed <CheckIcon className="h-4 w-4" />
+                    Completed <CheckIcon className="h-4 w-4" />
                     </label>
+                    </div>
+                {/* GPA input  */}
+                {selectedStatus === STATUS_COMPLETED && (
+                    <div className="mt-3">
+                    <input
+                        id="gpa"
+                        name="gpa"
+                        type="number"
+                        step="1.0"
+                        onChange={handleGpaChange}
+                        placeholder="Enter Your GPA"
+                        className="mt-1 block w-full rounded-md border border-gray-300 p-2"
+                    />
+                    </div>
+                )}
+
                 </div>
                 </div>
-                </div>
-                
-            </fieldset>
+                <div>
+            </div>
+                </fieldset>
+
             </div>
 
             <div className="mt-6 flex justify-end gap-4">
