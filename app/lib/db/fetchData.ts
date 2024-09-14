@@ -1,13 +1,17 @@
 import { sql } from '@vercel/postgres';
 import {
-    LatestEnrollments,
+    // LatestEnrollments,
     EnrolledCoursesTable,
-    Courses,
-    AddCourse
-} from './definitions';
+    AddCourse,
+    CourseDetail,
+} from '@/app/lib/definitions';
 import { auth } from '@/auth';
 import type { Students } from '@/app/lib/definitions';
 import { unstable_noStore as noStore } from 'next/cache';
+import { 
+    getEnrolledCourse, 
+    getLatestEnrollments,
+    getCourseDetail } from './queries'; 
 
 export async function fetchStudentId() {
     noStore();
@@ -21,14 +25,7 @@ export async function fetchLatestEnrollments() {
     noStore();
     try {
         const stuId = await fetchStudentId();
-        const data = await sql<LatestEnrollments>`
-        SELECT c.course_name, c.course_code 
-        FROM enrollments e
-        JOIN courses c ON e.course_id = c.id
-        JOIN students s ON s.id = e.user_id
-        WHERE s.id = ${stuId.rows[0].id}
-        ORDER BY e.year DESC
-        LIMIT 4`;
+        const data = await getLatestEnrollments(stuId.rows[0].id);
         
         return data.rows;
     } catch (error) {
@@ -45,25 +42,7 @@ export async function fetchEnrolledCourse(
     noStore();
     const stuId = await fetchStudentId();
     try {
-    const enrollCourse = await sql<EnrolledCoursesTable>`
-        SELECT
-            c.course_code,
-            c.course_name,
-            e.year,
-            e.semester,
-            e.gpa_point,
-            e.status,
-            e.id
-        FROM enrollments e
-        JOIN courses c ON e.course_id = c.id
-        WHERE
-            e.user_id = ${stuId.rows[0].id} AND (
-            c.course_name ILIKE ${`%${query}%`} OR
-            c.course_code ILIKE ${`%${query}%`} OR
-            e.year::text ILIKE ${`%${query}%`} )
-            
-        ORDER BY e.year DESC
-    `;
+    const enrollCourse = await getEnrolledCourse(stuId.rows[0].id,query)
 
     return enrollCourse.rows;
     } catch (error) {
@@ -73,6 +52,7 @@ export async function fetchEnrolledCourse(
 }
 
 export async function fetchCourse() {
+    noStore();
     try{
         const data = await sql<AddCourse>`
         SELECT * FROM courses
@@ -85,4 +65,14 @@ export async function fetchCourse() {
     }
 }
 
-
+//fetch assignment info of the enrolled course 
+export async function fetchCourseDetail(id:string) {
+    noStore();
+    try{
+        const data = await getCourseDetail(id);
+        return data.rows
+    } catch (err) {
+        console.error('Database Error:', err);
+        throw new Error('Failed to fetch course detail.');
+    }
+}

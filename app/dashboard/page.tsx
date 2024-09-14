@@ -1,8 +1,8 @@
 
 import LatestEnrollment from '@/app/ui/dashboard/latest-enrollments';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchLatestEnrollments } from '@/app/lib/data';
-import { fetchStudentId } from '@/app/lib/data';
+import { fetchLatestEnrollments } from '@/app/lib/db/fetchData';
+import { fetchStudentId } from '@/app/lib/db/fetchData';
 
 export default async function Page(){
     const LatestEnrollments = await fetchLatestEnrollments();

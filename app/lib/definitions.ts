@@ -58,3 +58,14 @@ export type AddCourse ={
     semester:string;
     status:'Upcoming' | 'completed';
 }
+
+export type CourseDetail = {
+    id: string;
+    user_id: string;
+    course_code: string;
+    course_name: string;
+    assignment_name:string;
+    grade: number;
+    gap_point:number;
+    
+}

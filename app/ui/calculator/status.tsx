@@ -6,7 +6,7 @@ export default async function CourseStatus({
     }: { 
     status: string,
     }) {
-        console.log(status)
+        
     return (
         <span
         className={clsx(

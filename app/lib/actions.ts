@@ -7,12 +7,13 @@ import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { courseExists, 
+import { 
+    courseExists, 
     fetchCourseId, 
     insertCourse,
     insertEnrollment,
     } from "@/app/lib/db/queries";
-import { fetchStudentId } from "@/app/lib/data";
+import { fetchStudentId } from "@/app/lib/db/fetchData";
 
 
 
