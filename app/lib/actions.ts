@@ -2,7 +2,6 @@
 
 import { signIn } from "@/auth";
 import { sql } from "@vercel/postgres";
-import { error } from "console";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -12,8 +11,12 @@ import {
     fetchCourseId, 
     insertCourse,
     insertEnrollment,
+    insertAssignment,
     } from "@/app/lib/db/queries";
-import { fetchStudentId } from "@/app/lib/db/fetchData";
+import { 
+    fetchStudentId,
+    weightValid
+} from "@/app/lib/db/fetchData";
 
 
 
@@ -58,8 +61,12 @@ export async function register(
 
 export async function deleteCourse(id:string) {
     await sql `DELETE FROM enrollments WHERE id = ${id}`;
-    revalidatePath('dashborad/calculator');
+    revalidatePath('dashborad/predictor');
     
+}
+export async function deleteAssignment(id:string) {
+    await sql `DELETE FROM assignments WHERE id = ${id}`;
+    revalidatePath('dashborad/predictor/');
 }
 
 const FormSchema = z.object({
@@ -73,6 +80,7 @@ const FormSchema = z.object({
     year: z.string(),
     semester:z.string(),
     gpa: z.coerce.number(),
+    unit: z.coerce.number(),
     status:z.enum(['upcoming','completed']),
 
 })
@@ -85,6 +93,7 @@ export type State = {
         semester?: string[];
         gpa?: string[]
         status?:string[];
+        unit:string[];
     };
     message?: string | null;
 } ;
@@ -103,6 +112,7 @@ export async function addCourse(
         year: formData.get('year'),
         semester: formData.get('semester'),
         gpa:formData.get('gpa'),
+        unit: formData.get('unit'),
         status: formData.get('status'),
     });
     if (!validatedFields.success){
@@ -118,6 +128,7 @@ export async function addCourse(
         semester,
         gpa,
         status,
+        unit,
     } = validatedFields.data;
 
     course_code.toLocaleUpperCase;
@@ -128,11 +139,50 @@ export async function addCourse(
         const courseId = await fetchCourseId(course_code);
         insertEnrollment(stuId,courseId,Number.parseInt(year),semester,gpa,status,);
     }else{
-        insertCourse(course_code,course_name);
+        insertCourse(course_code,course_name,unit);
         const courseId = await fetchCourseId(course_code);
         insertEnrollment(stuId,courseId,Number.parseInt(year),semester,gpa,status);
     }
     
-    revalidatePath('/dashboard/calculator')
-    redirect('/dashboard/calculator')
+    revalidatePath('/dashboard/predictor')
+    redirect('/dashboard/predictor')
+}
+
+
+const assignmentFormSchema = z.object({
+    id: z.string(),
+    AssignmentName: z.string(),
+    grade: z.coerce.number(),
+    weight: z.coerce.number(),
+    eid:z.string(),
+})
+const AddAssignment = assignmentFormSchema.omit({id:true});
+export async function addAssignment(
+    formData:FormData,
+){
+    const validatedFields = AddAssignment.safeParse({
+        eid: formData.get('eid'),
+        AssignmentName: formData.get('assignmentName'),
+        grade: formData.get('grade') ,
+        weight: formData.get('weight'),
+    });
+    if (!validatedFields.success) {
+        return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Add Assignment.',
+        };
+    }
+    
+    const {
+        eid,
+        AssignmentName,
+        grade,
+        weight
+    } = validatedFields.data
+    
+    
+    
+    insertAssignment(eid,AssignmentName,grade,weight)
+    revalidatePath(`/dashboard/predictor/${eid}/detail`)
+    redirect(`/dashboard/predictor/${eid}/detail`)
 }

@@ -1,5 +1,5 @@
-import { UpdateCourse, DeleteCourse } from '@/app/ui/calculator/button';
-import CourseStatus from '@/app/ui/calculator/status';
+import { UpdateCourse, DeleteCourse } from '@/app/ui/predictor/button';
+import CourseStatus from '@/app/ui/predictor/status';
 import { fetchEnrolledCourse } from '@/app/lib/db/fetchData';
 import Link from 'next/link';
 
@@ -59,10 +59,10 @@ export default async function CoursesTable({
                     Course Name
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                    semester
+                    Semester
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                    Status
+                    Status/Grade 
                     </th>
                     <th scope="col" className="relative py-3 pl-6 pr-3">
                     <span className="sr-only">Edit</span>
@@ -80,17 +80,17 @@ export default async function CoursesTable({
                     >
                     
                     <td className="whitespace-nowrap ">
-                        <Link className="flex items-center gap-3 py-3 pl-6 pr-3" href={`/dashboard/calculator/${enrollCourse.id}/detail`}>
+                        <Link className="flex items-center gap-3 py-3 pl-6 pr-3" href={`/dashboard/predictor/${enrollCourse.id}/detail`}>
                         {enrollCourse.course_code}
                         </Link>
                     </td>
                     
                     <td className="whitespace-nowrap ">
-                        <Link className='px-3 py-3' href={`/dashboard/calculator/${enrollCourse.id}/detail`}>{enrollCourse.course_name}</Link>
+                        <Link className='px-3 py-3' href={`/dashboard/predictor/${enrollCourse.id}/detail`}>{enrollCourse.course_name}</Link>
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3">
-                        <Link className='px-3 py-3' href={`/dashboard/calculator/${enrollCourse.id}/detail`}>
+                        <Link className='px-3 py-3' href={`/dashboard/predictor/${enrollCourse.id}/detail`}>
                         {enrollCourse.year} semester:{enrollCourse.semester}
                         </Link>
                     </td>

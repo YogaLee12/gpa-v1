@@ -1,9 +1,6 @@
 import { sql } from '@vercel/postgres';
 import {
-    // LatestEnrollments,
-    EnrolledCoursesTable,
     AddCourse,
-    CourseDetail,
 } from '@/app/lib/definitions';
 import { auth } from '@/auth';
 import type { Students } from '@/app/lib/definitions';
@@ -11,7 +8,9 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { 
     getEnrolledCourse, 
     getLatestEnrollments,
-    getCourseDetail } from './queries'; 
+    getCourseDetail,
+    weightFlag,
+} from './queries'; 
 
 export async function fetchStudentId() {
     noStore();
@@ -74,5 +73,16 @@ export async function fetchCourseDetail(id:string) {
     } catch (err) {
         console.error('Database Error:', err);
         throw new Error('Failed to fetch course detail.');
+    }
+}
+
+export async function weightValid(eid:string) {
+    noStore();
+    try {
+        const data = await weightFlag(eid);
+        return data;
+    }catch (err) {
+        console.error('Database Error:' ,err);
+        throw new Error('Failed to fetch weight')
     }
 }

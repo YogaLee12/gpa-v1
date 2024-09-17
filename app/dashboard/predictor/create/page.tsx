@@ -1,4 +1,4 @@
-import Form from '@/app/ui/calculator/create-form';
+import Form from '@/app/ui/predictor/create-form';
 import { fetchCourse } from '@/app/lib/db/fetchData';
     
 export default async function Page() {

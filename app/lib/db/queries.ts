@@ -19,10 +19,12 @@ export async function courseExists(course_code:string) {
 
 export async function insertCourse(
     course_code:string,
-    course_name:string) {
+    course_name:string,
+    unit: number
+) {
     noStore();
-    await sql`INSERT INTO courses (course_code, course_name)
-    VALUES (${course_code}, ${course_name})`
+    await sql`INSERT INTO courses (course_code, course_name,unit)
+    VALUES (${course_code}, ${course_name},${unit})`
 }
 
 export async function fetchCourseId(course_code:string) {
@@ -97,16 +99,37 @@ export async function getCourseDetail(
     noStore();
     const data = await sql<CourseDetail>`
     SELECT 
-    a.id,
+    a.id aid,
     a.assignment_name,
     a.grade,
+    a.weight,
     e.gpa_point,
+    e.id,
     c.course_code,
     c.course_name
-    FROM assignments a
-    JOIN enrollments e ON e.id = a.enrollment_id
+    FROM enrollments e
+    LEFT JOIN assignments a ON e.id = a.enrollment_id
     JOIN courses c ON e.course_id = c.id
-    WHERE a.enrollment_id = ${enrollmentId}
+    WHERE e.id = ${enrollmentId}
     `
     return data;
+}
+
+export async function weightFlag(eid : string) {
+    noStore();
+    const data = await sql`
+    SELECT weight from assignments where enrollment_id = ${eid}`
+    return data
+}
+
+export async function insertAssignment(
+    eid:string,
+    assignment_name: string,
+    grade: number,
+    weight: number,
+) {
+    noStore();
+    await sql`
+    INSERT INTO assignments (enrollment_id,assignment_name,grade,weight)
+    VALUES(${eid},${assignment_name},${grade},${weight})`
 }

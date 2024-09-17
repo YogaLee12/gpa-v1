@@ -1,7 +1,5 @@
-import { UpdateCourse, DeleteCourse } from '@/app/ui/calculator/button';
-import CourseStatus from '@/app/ui/calculator/status';
+import { UpdateCourse, DeleteAssignment } from '@/app/ui/predictor/button';
 import { fetchCourseDetail } from '@/app/lib/db/fetchData';
-import Link from 'next/link';
 
 export default async function CoursesDetail({
     query,
@@ -27,16 +25,17 @@ export default async function CoursesDetail({
                     <div className="flex items-center justify-between border-b pb-4">
                     <div>
                         <div className="mb-2 flex items-center">
-                        <p>{enrollCourse.assignment_name}</p>
+                        <p className='font-blod text-xl '>{enrollCourse.assignment_name}</p>
                         </div>
-                    </div>
-                    <p> {enrollCourse.grade}</p>
+                    </div><div>
+                    <p className='font-blod text-xl inline'> {enrollCourse.grade}</p> 
+                    <p className='text-sm text-gray-500 '>/ {enrollCourse.weight}</p></div>
                     </div>
                     <div className="flex w-full items-center justify-between pt-4">
                     
                     <div className="flex justify-end gap-2">
                         <UpdateCourse id={enrollCourse.id} />
-                        <DeleteCourse id={enrollCourse.id} />
+                        <DeleteAssignment id={enrollCourse.aid} />
                     </div>
                     </div>
                 </div>
@@ -70,18 +69,19 @@ export default async function CoursesDetail({
                     
                     
                     <td className="whitespace-nowrap ">
-                        <Link className='px-3 py-3' href={`/dashboard/calculator/${enrollCourse.id}/detail`}>{enrollCourse.assignment_name}</Link>
+                        <div className='px-3 py-3 font-blod text-xl ' >{enrollCourse.assignment_name}</div>
                     </td>
 
                     
                     
                     <td className="whitespace-nowrap px-3 py-3">
-                        <p>{enrollCourse.grade}</p>
+                        <p className='font-blod text-xl '>{enrollCourse.grade} </p>
+                        <p className='text-sm text-gray-500 '>  / {enrollCourse.weight}</p>
                     </td>
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
                         <UpdateCourse id={enrollCourse.id} />
-                        <DeleteCourse id={enrollCourse.id} />
+                        <DeleteAssignment id={enrollCourse.aid} />
                         </div>
                     </td>
                     </tr>

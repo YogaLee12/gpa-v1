@@ -29,6 +29,7 @@ export type Assignments = {
     enrollment_id: string;
     assignment_name: string;
     grade: string;
+    weight:string;
 };
 
 export type LatestEnrollments = {
@@ -56,6 +57,7 @@ export type AddCourse ={
     course_name: string;
     year:string;
     semester:string;
+    unit:string;
     status:'Upcoming' | 'completed';
 }
 
@@ -67,5 +69,6 @@ export type CourseDetail = {
     assignment_name:string;
     grade: number;
     gap_point:number;
-    
+    weight:string;
+    aid: string;
 }
