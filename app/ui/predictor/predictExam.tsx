@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react';
 import { CourseDetail } from "@/app/lib/definitions";
 import { gradePredict } from '@/app/lib/gradePredict';
 

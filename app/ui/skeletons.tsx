@@ -159,7 +159,7 @@ export function MobileSkeleton() {
   );
 }
 
-export function InvoicesTableSkeleton() {
+export function CourseTableSkeleton() {
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">

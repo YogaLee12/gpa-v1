@@ -1,6 +1,7 @@
 import { sql } from '@vercel/postgres';
 import {
     AddCourse,
+    calculGPA,
 } from '@/app/lib/definitions';
 import { auth } from '@/auth';
 import type { Students } from '@/app/lib/definitions';
@@ -10,6 +11,8 @@ import {
     getLatestEnrollments,
     getCourseDetail,
     weightFlag,
+    getCompletedCourse,
+    getGPApara,
 } from './queries'; 
 
 export async function fetchStudentId() {
@@ -50,6 +53,20 @@ export async function fetchEnrolledCourse(
     }
 }
 
+export async function fetchCompletedCourse(query:string) {
+    noStore();
+    const stuId = await fetchStudentId();
+    try {
+    const completedCourse = await getCompletedCourse(stuId.rows[0].id,query)
+
+    return completedCourse.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch course.');
+    }
+    
+}
+
 export async function fetchCourse() {
     noStore();
     try{
@@ -85,4 +102,11 @@ export async function weightValid(eid:string) {
         console.error('Database Error:' ,err);
         throw new Error('Failed to fetch weight')
     }
+}
+
+export async function calculateGPA() {
+    noStore();
+    const stuId = await fetchStudentId();
+    const GPApar = await getGPApara(stuId.rows[0].id);
+    return GPApar;
 }

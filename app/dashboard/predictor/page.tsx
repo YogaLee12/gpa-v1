@@ -2,7 +2,7 @@ import Search from "@/app/ui/search";
 import Table from "@/app/ui/predictor/courseTable"
 import { lusitana } from "@/app/ui/fonts";
 import { Suspense } from "react";
-import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
+import { CourseTableSkeleton } from "@/app/ui/skeletons";
 import { AddCourse } from "@/app/ui/predictor/button"
 
 
@@ -10,11 +10,9 @@ export default async function Page({
     searchParams,} : {
         searchParams ?:{
             query ?: string;
-            page ?: string;
         };
     }) {
         const query = searchParams?.query||'';
-        const currentPage = Number(searchParams?.page)||1;
     
     return (
         <div className="w-full">
@@ -26,12 +24,9 @@ export default async function Page({
             <AddCourse />
             </div>
 
-            <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+            <Suspense key={query }fallback={<CourseTableSkeleton />}>
             <Table query={query}  />
             </Suspense>
-            <div className="mt-5 flex w-full justify-center">
-            {/* <Pagination totalPages={totalPages} /> */}
-            </div>
         </div>
         );
     }

@@ -58,12 +58,11 @@ export type AddCourse ={
     year:string;
     semester:string;
     unit:string;
-    status:'Upcoming' | 'completed';
+    status:'upcoming' | 'completed';
 }
 
 export type CourseDetail = {
     id: string;
-    user_id: string;
     course_code: string;
     course_name: string;
     assignment_name:string;
@@ -71,4 +70,14 @@ export type CourseDetail = {
     gap_point:number;
     weight:string;
     aid: string;
+    year: string;
+    status:'upcoming' | 'completed';
+    semester: string;
+    unit: string;
+}
+
+export type calculGPA={
+    grade:number;
+    gpa_point:number;
+    unit:number;
 }

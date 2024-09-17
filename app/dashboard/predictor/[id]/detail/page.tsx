@@ -6,6 +6,7 @@ import { ExamPredict } from "@/app/ui/predictor/predictExam";
 import Breadcrumbs from '@/app/ui/predictor/breadcrumbs';
 import { fetchCourseDetail } from "@/app/lib/db/fetchData";
 import Table from "@/app/ui/predictor/courseDetail"
+import Form from "@/app/ui/predictor/courseEdit";
 
 export default async function Page({ 
     params,
@@ -38,6 +39,7 @@ export default async function Page({
             </div>
 
             <Suspense >
+            <Form courses={course}/>
             <Table query={enrollmentId}  />
             </Suspense>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8 ">

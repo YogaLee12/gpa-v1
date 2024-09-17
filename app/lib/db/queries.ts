@@ -1,7 +1,8 @@
 import { sql } from "@vercel/postgres";
 import { EnrolledCoursesTable,
         LatestEnrollments,
-        CourseDetail
+        CourseDetail,
+        calculGPA
 } from '@/app/lib/definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -70,6 +71,36 @@ export async function getEnrolledCourse(
         FROM enrollments e
         JOIN courses c ON e.course_id = c.id
         WHERE
+            e.status = 'upcoming' AND
+            e.user_id = ${stuId} AND (
+            c.course_name ILIKE ${`%${query}%`} OR
+            c.course_code ILIKE ${`%${query}%`} OR
+            e.year::text ILIKE ${`%${query}%`} )
+            
+        ORDER BY e.year DESC 
+        `
+        return data
+}
+
+export async function getCompletedCourse(
+    stuId:string,
+    query:string
+) {
+    noStore()
+    const data = 
+    await sql<EnrolledCoursesTable>`
+    SELECT
+            c.course_code,
+            c.course_name,
+            e.year,
+            e.semester,
+            e.gpa_point,
+            e.status,
+            e.id
+        FROM enrollments e
+        JOIN courses c ON e.course_id = c.id
+        WHERE
+            e.status = 'completed' AND
             e.user_id = ${stuId} AND (
             c.course_name ILIKE ${`%${query}%`} OR
             c.course_code ILIKE ${`%${query}%`} OR
@@ -105,6 +136,10 @@ export async function getCourseDetail(
     a.weight,
     e.gpa_point,
     e.id,
+    e.year,
+    e.status,
+    e.semester,
+    c.unit,
     c.course_code,
     c.course_name
     FROM enrollments e
@@ -112,6 +147,16 @@ export async function getCourseDetail(
     JOIN courses c ON e.course_id = c.id
     WHERE e.id = ${enrollmentId}
     `
+    return data;
+}
+
+export async function getGPApara(id:string) {
+    const data = await sql<calculGPA>
+    `
+    Select * from enrollments 
+    join courses ON enrollments.course_id = courses.id 
+    where enrollments.status = 'completed' 
+    AND enrollments.user_id = ${id} `
     return data;
 }
 
