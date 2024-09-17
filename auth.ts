@@ -50,6 +50,8 @@ export const { auth, signIn, signOut } = NextAuth({
                     const student = await getStudent(email);
 
                     if (student) {
+                        
+
                         // Login scenario
                         const passwordMatch = await bcrypt.compare(password, student.password);
                         if (passwordMatch) {

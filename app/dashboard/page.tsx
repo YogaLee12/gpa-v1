@@ -1,16 +1,16 @@
 
 import LatestEnrollment from '@/app/ui/dashboard/latest-enrollments';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchLatestEnrollments } from '@/app/lib/data';
-import { auth } from '@/auth';
+import { fetchLatestEnrollments } from '@/app/lib/db/fetchData';
+import { fetchStudentId } from '@/app/lib/db/fetchData';
 
 export default async function Page(){
     const LatestEnrollments = await fetchLatestEnrollments();
-    const student = await auth() || null;
+    const student = await fetchStudentId() || null;
     return (
         <main>
             <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-            Welcom  {student?.user?.name || "Guest"} !
+            Welcom  {student?.rows[0].name || "Guest"} !
             </h1>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             </div>

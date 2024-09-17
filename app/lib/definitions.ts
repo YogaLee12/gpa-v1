@@ -1,137 +1,83 @@
-// This file contains type definitions for your data.
-// It describes the shape of the data, and what data type each property should accept.
-// For simplicity of teaching, we're manually defining these types.
-// However, these types are generated automatically if you're using an ORM such as Prisma.
+// This file contains type definitions for the data.
+
 
 export type Students = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  avatar_url: string;
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    avatar_url: string;
 };
 
 export type Courses = {
-  id: string;
-  course_code: string;
-  course_name: string;
+    id: string;
+    course_code: string;
+    course_name: string;
 };
 
 export type Enrollments = {
-  id: string;
-  user_id: string;
-  course_id: string;
-  year: string;
-  semester:  string;
-  gpa_point: string;
+    id: string;
+    user_id: string;
+    course_id: string;
+    year: string;
+    semester:  string;
+    gpa_point: string;
 };
 
 export type Assignments = {
-  id: string;
-  enrollment_id: string;
-  assignment_name: string;
-  grade: string;
+    id: string;
+    enrollment_id: string;
+    assignment_name: string;
+    grade: string;
+    weight:string;
 };
 
 export type LatestEnrollments = {
-  id: string;
-  course_name: string;
-  course_code: string;
+    id: string;
+    course_name: string;
+    course_code: string;
 };
 
-// The database returns a number for amount, but we later format it to a string with the formatCurrency function
-// export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
-// 	amount: number;
-// };
 
 export type EnrolledCoursesTable = {
-course_id: string;
-course_code: string;
-  course_name:string;
-gpa_point: number;
+    id: string;
+    user_id:string;
+    course_id: string;
+    course_code: string;
+    course_name:string;
+    year:string;
+    semester: string;
+    gpa_point: number;
+    status:'upcoming' | 'completed';
 };
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-};
+export type AddCourse ={
+    id:string;
+    course_code:string;
+    course_name: string;
+    year:string;
+    semester:string;
+    unit:string;
+    status:'upcoming' | 'completed';
+}
 
-export type Customer = {
-  id: string;
-  name: string;
-  email: string;
-  image_url: string;
-};
+export type CourseDetail = {
+    id: string;
+    course_code: string;
+    course_name: string;
+    assignment_name:string;
+    grade: number;
+    gap_point:number;
+    weight:string;
+    aid: string;
+    year: string;
+    status:'upcoming' | 'completed';
+    semester: string;
+    unit: string;
+}
 
-export type Invoice = {
-  id: string;
-  customer_id: string;
-  amount: number;
-  date: string;
-  // In TypeScript, this is called a string union type.
-  // It means that the "status" property can only be one of the two strings: 'pending' or 'paid'.
-  status: 'pending' | 'paid';
-};
-
-export type Revenue = {
-  month: string;
-  revenue: number;
-};
-
-export type LatestInvoice = {
-  id: string;
-  name: string;
-  image_url: string;
-  email: string;
-  amount: string;
-};
-
-// The database returns a number for amount, but we later format it to a string with the formatCurrency function
-export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
-  amount: number;
-};
-
-export type InvoicesTable = {
-  id: string;
-  customer_id: string;
-  name: string;
-  email: string;
-  image_url: string;
-  date: string;
-  amount: number;
-  status: 'pending' | 'paid';
-};
-
-export type CustomersTableType = {
-  id: string;
-  name: string;
-  email: string;
-  image_url: string;
-  total_invoices: number;
-  total_pending: number;
-  total_paid: number;
-};
-
-export type FormattedCustomersTable = {
-  id: string;
-  name: string;
-  email: string;
-  image_url: string;
-  total_invoices: number;
-  total_pending: string;
-  total_paid: string;
-};
-
-export type CustomerField = {
-  id: string;
-  name: string;
-};
-
-export type InvoiceForm = {
-  id: string;
-  customer_id: string;
-  amount: number;
-  status: 'pending' | 'paid';
-};
+export type calculGPA={
+    grade:number;
+    gpa_point:number;
+    unit:number;
+}
